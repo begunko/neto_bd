@@ -1,0 +1,61 @@
+-- Создание таблицы Genres
+CREATE TABLE Genres (
+    genre_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Создание таблицы Artists
+CREATE TABLE Artists (
+    artist_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Промежуточная таблица ArtistGenres (многие-ко-многим)
+CREATE TABLE ArtistGenres (
+    artist_id INT,
+    genre_id INT,
+    PRIMARY KEY (artist_id, genre_id),
+    FOREIGN KEY (artist_id) REFERENCES Artists(artist_id) ON DELETE CASCADE,
+    FOREIGN KEY (genre_id) REFERENCES Genres(genre_id) ON DELETE CASCADE
+);
+
+-- Создание таблицы Albums
+CREATE TABLE Albums (
+    album_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    release_year INT NOT NULL
+);
+
+-- Промежуточная таблица ArtistAlbums (многие-ко-многим)
+CREATE TABLE ArtistAlbums (
+    artist_id INT,
+    album_id INT,
+    PRIMARY KEY (artist_id, album_id),
+    FOREIGN KEY (artist_id) REFERENCES Artists(artist_id) ON DELETE CASCADE,
+    FOREIGN KEY (album_id) REFERENCES Albums(album_id) ON DELETE CASCADE
+);
+
+-- Создание таблицы Tracks
+CREATE TABLE Tracks (
+    track_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    duration INT NOT NULL, -- длительность в секундах
+    album_id INT NOT NULL,
+    FOREIGN KEY (album_id) REFERENCES Albums(album_id) ON DELETE CASCADE
+);
+
+-- Создание таблицы Compilations
+CREATE TABLE Compilations (
+    compilation_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    release_year INT NOT NULL
+);
+
+-- Промежуточная таблица CompilationTracks (многие-ко-многим)
+CREATE TABLE CompilationTracks (
+    compilation_id INT,
+    track_id INT,
+    PRIMARY KEY (compilation_id, track_id),
+    FOREIGN KEY (compilation_id) REFERENCES Compilations(compilation_id) ON DELETE CASCADE,
+    FOREIGN KEY (track_id) REFERENCES Tracks(track_id) ON DELETE CASCADE
+);
